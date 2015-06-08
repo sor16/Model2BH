@@ -40,12 +40,3 @@ for(ee in 1:e){
   dist=abs(W-t(W))
 return(dist,A,n,N)
 }
-
-
-# W=[];
-# for ee=1:e
-#     W=[W O];
-# end
-# dist=abs(W-W');
-# 
-# end
