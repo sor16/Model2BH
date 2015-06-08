@@ -27,12 +27,12 @@ Densevalm22 <- function(th,RC){
   sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*as.matrix(rnorm(RC$N)),0)
   x=x_u-t(W)%*%solve(L,sss)
   yp=X %*% x
+  yp=yp[1:RC$N,]
+  ypo=yp+as.matrix(rnorm(RC$n))*sqrt(varr)
   
-  ypo=yp+as.matrix(rnorm(RC$n,sd=sqrt(exp(th[2]))))
+  D=-2*sum(log(dlnorm(exp(RC$y[1:RC$N,]),yp,sqrt(varr))))
   
-  D=-2*sum(log(dlnorm(exp(RC$y),X%*%x,sqrt(exp(th[2])))))
-  
-  return(list("pmin"=-p,"p"=p,"x"=x,"yp"=yp,"ypo"=ypo,"D"=D))
+  return(list("pmin"=-p,"p"=p,"x"=x,"yp"=yp,"ypo"=ypo,"D"=D,"varr"=varr))
   
   
 }
