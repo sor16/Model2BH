@@ -57,18 +57,16 @@ RC$N=Adist$N
 RC$A=Matrix(RC$A,sparse=TRUE)
 RC$P=diag(nrow=5,nrow=5,6)-matrix(nrow=5,ncol=5,1)
  
- RC$Sig_ab= rbind((cbind(t(as.matrix(RC$sig_a^2)), t(as.matrix(RC$p_ab%*%RC$sig_a%*%RC$sig_b))) ), cbind)
-# 
-# 
-# RC$Sig_ab=[RC.sig_a^2 RC.p_ab*RC.sig_a*RC.sig_b;RC.p_ab*RC.sig_a*RC.sig_b RC.sig_b^2]; %Setja Ãƒ­ RC
-# RC$mu_x=[RC.mu_a RC.mu_b zeros(1,RC.n)]'; %Setja Ãƒ­ RC
-# 
-# RC.B=B_splines(RC.w_tild'/RC.w_tild(length(RC.w_tild)));
-# RC.Z=[zeros(2,1);ones(RC.n,1)]';
-# 
-# Dens =@(t)-DensEvalm22(t,RC);
-# 
-# [t_m,~,~,~,~,H]=fminunc(Dens,zeros(9,1));
+RC$Sig_ab= rbind((c(RC$sig_a^2), RC$p_ab*RC$sig_a*RC$sig_b), c(RC$p_ab*RC$sig_a*RC$sig_b RC$sig_b^2))
+
+RC$mu_x=as.matrix(c(RC.mu_a,RC.mu_b, rep(0,RC$n)]'; %Setja Ãƒ? RC
+ 
+RC$B=B_splines(t(RC$w_tild)/RC$w_tild(length(RC$w_tild)))
+RC$Z=cbind(rep(0,2),rep(1,RC$n)
+
+Dens = function(th) DensEvalm22(th,RC);
+
+Densmin=optim(par=rep(0,9),Dens,hessian=TRUE)
 # 
 # phi_b=t_m(3);
 # sig_b2=t_m(2);
