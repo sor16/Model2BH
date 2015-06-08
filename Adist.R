@@ -15,7 +15,8 @@ Adist <- function(w){
   # %N:     Number of measurements
   
 N=length(w)
-A=1
+A=matrix()
+A[1,1]=1
 O=w[1]
 e=1
 for(ee in 2:N){

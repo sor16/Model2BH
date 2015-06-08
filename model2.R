@@ -1,4 +1,6 @@
 #Model2BH
+library(Matrix)
+library(ggplot2)
 
 #axel/begin/08.06.15
 
@@ -6,12 +8,13 @@
  Nit=50000;
  dataset=15;
 
+RC=list()
 
 RC$mu_a=3.20
 RC$mu_b=2.29
 RC$sig_a=sqrt(1.21)
 RC$sig_b=sqrt(0.48)
-RC$p_ab=-.61
+RC$p_ab=-0.61
 RC$mu_c=1.9000
 RC$nugget=10^-8
 
@@ -43,14 +46,22 @@ RC$w_tild=RC$w-min(RC$w)
  ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
 #axel/end/08.06.15
+
+Adist <- Adist(RC$w)
+RC$A=Adist$A
+RC$dist=Adist$dist
+RC$n=Adist$n
+RC$N=Adist$N
  
-# [RC.A,RC.dist,RC.n,RC.N] = Adist(RC.w);
-# RC.A=sparse(RC.A);
-# RC.P=Pgen;
+ 
+RC$A=Matrix(RC$A,sparse=TRUE)
+RC$P=diag(nrow=5,nrow=5,6)-matrix(nrow=5,ncol=5,1)
+ 
+ RC$Sig_ab= rbind((cbind(t(as.matrix(RC$sig_a^2)), t(as.matrix(RC$p_ab%*%RC$sig_a%*%RC$sig_b))) ), cbind)
 # 
 # 
-# RC.Sig_ab=[RC.sig_a^2 RC.p_ab*RC.sig_a*RC.sig_b;RC.p_ab*RC.sig_a*RC.sig_b RC.sig_b^2]; %Setja Ãƒ­ RC
-# RC.mu_x=[RC.mu_a RC.mu_b zeros(1,RC.n)]'; %Setja Ãƒ­ RC
+# RC$Sig_ab=[RC.sig_a^2 RC.p_ab*RC.sig_a*RC.sig_b;RC.p_ab*RC.sig_a*RC.sig_b RC.sig_b^2]; %Setja Ãƒ­ RC
+# RC$mu_x=[RC.mu_a RC.mu_b zeros(1,RC.n)]'; %Setja Ãƒ­ RC
 # 
 # RC.B=B_splines(RC.w_tild'/RC.w_tild(length(RC.w_tild)));
 # RC.Z=[zeros(2,1);ones(RC.n,1)]';
