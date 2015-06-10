@@ -1,3 +1,6 @@
+#equivalent to
+#unique(wq[,1])
+
 
 Adist <- function(w){
 
@@ -13,35 +16,46 @@ library(Matrix)
   # %       dist_{ij}=|w_{i}'-w_{j}'|
   # %n:     Number of unique measurements 
   # %N:     Number of measurements
-#w=RC$w
-#w=t(as.matrix(w))  
-N=length(w)
-O=t(as.matrix(w[1]))
-A=matrix()
+
+
+  
+N=length(w[,1])
+O=unique(w[,1])
+
+n_e=length(O)
+
+  
+A=matrix(0,nrow=N,ncol=n_e)
+
 A[1,1]=1
+
 e=1
 for(ee in 2:N){
   if( w[ee]==w[ee-1]){
     
-#A[ee,e]=1
+A[ee,e]=1
 
   }else{
     e=e+1
-#A[ee,e]=1
-O[e]=w[ee]
+A[ee,e]=1
+#O[ee]=w[ee]
   }
   }
+
+
+
 O=t(O)
-A=diag(1,nrow=N,ncol=N)
+#A=diag(1,nrow=N,ncol=N)
 A=Matrix(A,sparse=TRUE)
 w2=O
-n=e
+
+n=length(O)
 
 W=O
 
-for(ee in 2:e){
-  W=cbind(W,O)
+for(ee in 2:n){
+  W=rbind(W,O)
 }
   dist=abs(W-t(W))
-return(dist,A,n,N)
+return(list("dist"=dist,"A"=A,"n"=n,"N"=N))
 }
