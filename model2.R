@@ -63,11 +63,11 @@ RC$Sig_ab= rbind(c(RC$sig_a^2, RC$p_ab*RC$sig_a*RC$sig_b), c(RC$p_ab*RC$sig_a*RC
 RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #%Setja Ã? RC
  
 RC$B=B_splines(t(RC$w_tild)/RC$w_tild[length(RC$w_tild)])
-RC$Z=cbind(rep(0,2),rep(1,RC$n)
+RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
 
-Dens = function(th) DensEvalm22(th,RC);
+Dens = function(th) Densevalm22(th,RC)$pmin;
 
-Densmin=optim(par=rep(0,9),Dens,hessian=TRUE)
+Densmin=optim(par=as.matrix(rep(0,9)),Dens,hessian=TRUE)
 # 
 # phi_b=t_m(3);
 # sig_b2=t_m(2);
