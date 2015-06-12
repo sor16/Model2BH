@@ -73,7 +73,7 @@ XX[1,] = (1/dx^3)*(tau[M+1]-ZZZ)*(tau[M+1]-ZZZ)*(tau[M+1]-ZZZ)*(tau[M]<=ZZZ)*(ZZ
  }
  
 # % i = k + 2
-XX(k+2,:) =  -(1/6/dx^3)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]<=ZZZ)*(ZZZ<tau[k+3])-
+XX[k+2,] =  -(1/6/dx^3)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]<=ZZZ)*(ZZZ<tau[k+3])-
  (1/6/dx^3)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(ZZZ-tau[k+4])*(tau[k+3]<=ZZZ)*(ZZZ<tau[k+4])-
  (1/6/dx^3)*(tau[k+2]-ZZZ)*(ZZZ-tau[k+5])*(tau[k+3]-ZZZ)*(tau[k+3]<=ZZZ)*(ZZZ<tau[k+4])-
  (1/6/dx^3)*(tau[k+2]-ZZZ)*(ZZZ-tau[k+5])*(ZZZ-tau[k+5])*(tau[k+4]<=ZZZ)*(ZZZ<tau[k+5])-       
