@@ -36,7 +36,7 @@ RC$v=5
  wq = as.matrix(read.table('15.txt'))
 
 RC$y=rbind(as.matrix(log(wq[,2])),0)
-RC$w=0.01*wq[,1]
+RC$w=as.matrix(0.01*wq[,1])
 RC$w_tild=RC$w-min(RC$w)
 # 
  H=RC$w
