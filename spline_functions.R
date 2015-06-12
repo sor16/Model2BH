@@ -23,17 +23,18 @@ spline_functions <- function(ZZZ,tau,dx,k,M){
     (1/6/dx^3)*(tau[M+3]-ZZZ)*(tau[M+3]-ZZZ)*(tau[M+3]-ZZZ)*(tau[M+2]<=ZZZ)*(ZZZ<tau[M+3])
   
   # % i = 4,...,k + 1
-  for (kk in M:(k + 1)){
-    XX[kk,] = (1/6/dx^3)*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(tau[kk]<=ZZZ)*(ZZZ<tau[kk+1])+
-      (1/6/dx^3)*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(tau[kk+2]-ZZZ)*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+
-      (1/6/dx^3)*(ZZZ-tau[kk])*(tau[kk+3]-ZZZ)*(ZZZ-tau[kk+1])*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+ 
-      (1/6/dx^3)*(ZZZ-tau[kk])*(tau[kk+3]-ZZZ)*(tau[kk+3]-ZZZ)*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
-      (1/6/dx^3)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+1])*(ZZZ-tau[kk+1])*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+ 
-      (1/6/dx^3)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+1])*(tau[kk+3]-ZZZ)*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
-      (1/6/dx^3)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+2])*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
-      (1/6/dx^3)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(tau[kk+3]<=ZZZ)*(ZZZ<tau[kk+4]) 
-  }
-  
+#   for (kk in M:(k + 1)){
+#     XX[kk,] = (1/6/dx^3)*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(tau[kk]<=ZZZ)*(ZZZ<tau[kk+1])+
+#       (1/6/dx^3)*(ZZZ-tau[kk])*(ZZZ-tau[kk])*(tau[kk+2]-ZZZ)*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+
+#       (1/6/dx^3)*(ZZZ-tau[kk])*(tau[kk+3]-ZZZ)*(ZZZ-tau[kk+1])*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+ 
+#       (1/6/dx^3)*(ZZZ-tau[kk])*(tau[kk+3]-ZZZ)*(tau[kk+3]-ZZZ)*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
+#       (1/6/dx^3)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+1])*(ZZZ-tau[kk+1])*(tau[kk+1]<=ZZZ)*(ZZZ<tau[kk+2])+ 
+#       (1/6/dx^3)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+1])*(tau[kk+3]-ZZZ)*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
+#       (1/6/dx^3)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(ZZZ-tau[kk+2])*(tau[kk+2]<=ZZZ)*(ZZZ<tau[kk+3])+
+#       (1/6/dx^3)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(tau[kk+4]-ZZZ)*(tau[kk+3]<=ZZZ)*(ZZZ<tau[kk+4]) 
+#   }
+#   
+#Axel/check-spline-algorithm, in Matlab this for loop does not run. Change to 4:-1:3 in Matlab?
   # % i = k + 2
   XX[k+2,] =  -(1/6/dx^3)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(tau[k+2]<=ZZZ)*(ZZZ<tau[k+3])-
     (1/6/dx^3)*(tau[k+2]-ZZZ)*(tau[k+2]-ZZZ)*(ZZZ-tau[k+4])*(tau[k+3]<=ZZZ)*(ZZZ<tau[k+4])-
