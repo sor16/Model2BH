@@ -48,11 +48,11 @@ RC$w_tild=RC$w-min(RC$w)
 
 #axel/end/08.06.15
 
-Adist <- Adist(RC$w)
-RC$A=Adist$A
-RC$dist=Adist$dist
-RC$n=Adist$n
-RC$N=Adist$N
+Adist1 <- Adist(RC$w)
+RC$A=Adist1$A
+RC$dist=Adist1$dist
+RC$n=Adist1$n
+RC$N=Adist1$N
  
  
 RC$A=Matrix(RC$A,sparse=TRUE)
@@ -102,7 +102,7 @@ ymu=ymu[1:RC$N]
 plot(RC$w,exp(ymu))
 
 W=solve(L,(X%*%Sig_x))
-vartem=diag(X*(Sig_x-t(W)%*%W)%*%t(X))
+vartem=diag(X%*%(Sig_x-t(W)%*%W)%*%t(X))
 
 vartem=vartem[1:RC$N]
 varaprr=+vartem+varr_m
@@ -182,16 +182,10 @@ for(j in 1:4){
       varr_old=varr_new
     }
     
-    t[,i]=rbind(t_m,x_old)
+    t[,i]=t_old
     yp[,i]=yp_old
     ypo[,i]=ypo_old
-    #     t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
-    #     t_temp=t
-    #     yp=cbind(yp_temp,yp_old)
-    #     yp_temp=yp
-    #     ypo=cbind(ypo_temp,ypo_old)
-    #     ypo_temp=ypo
-    
+   
     D[1,i]=D_old
     varr[,i]=varr_old
   }
@@ -224,7 +218,7 @@ for(j in 1:4){
 }
 
 
-Dhat=-2*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m)))
+Dhat=(-2)*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m))))
 Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
 pd=Davg-Dhat
 DIC=Dhat+2*pd
