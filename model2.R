@@ -151,7 +151,7 @@ for(j in 1:4){
   
   
   
-  Dens<-Denseval11(t_old,RC)
+  Dens<-Densevalm22(t_old,RC)
   p_old=Dens$p
   x_old=Dens$x
   yp_old=Dens$yp
@@ -162,7 +162,7 @@ for(j in 1:4){
   for(i in 1:Nit){
     t_new=t_old+solve(t(LH),as.matrix(rnorm(9,0,1)))
     
-    Densnew<-Denseval11(t_new,RC)
+    Densnew<-Densevalm22(t_new,RC)
     p_new=Densnew$p
     x_new=Densnew$x
     yp_new=Densnew$yp
