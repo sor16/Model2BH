@@ -7,25 +7,25 @@ Densevalm22 <- function(th,RC){
   lambda=as.matrix(th[4:9,])
   
   
-  f=(lambda[1:5]-lambda[6])
+  f=as.matrix(lambda[1:5]-lambda[6])
   l=as.vector(log(RC$w_tild+exp(th[1,])))
   
-  varr=exp(RC$B%*%lambda)
-  Sig_eps=diag(rbind(varr,0))
+  varr=as.vector(exp(RC$B%*%lambda))
+  Sig_eps=diag(c(varr,0))
   R_Beta=(1+sqrt(5)*RC$dist/exp(phi_b)+5*RC$dist^2/(3*exp(phi_b)^2))*exp(-sqrt(5)*RC$dist/exp(phi_b))+diag(RC$n)*RC$nugget
   Sig_x=rbind(cbind(RC$Sig_ab,matrix(0,nrow=2,ncol=RC$n)),cbind(matrix(0,nrow=RC$n,ncol=2),exp(sig_b2)*R_Beta))
   
-  X=Matrix(rbind(cbind(1,l,Matrix(diag(l,nrow=length(l)))%*%RC$A),RC$Z))
-  L=chol(as.matrix(X)%*%Sig_x%*%t(as.matrix(X))+Sig_eps)
+  X=Matrix(rbind(cbind(1,l,Matrix(diag(l))%*%RC$A),RC$Z))
+  L=t(chol(as.matrix(X%*%Sig_x%*%t(X)+Sig_eps)))
   w=solve(L,RC$y-X%*%RC$mu_x)
-  p=p=-0.5%*%t(w)%*%w-sum(log(diag(L)))-
+  p=as.numeric(-0.5%*%t(w)%*%w-sum(log(diag(L)))-
     (RC$v+5-1)/2*log(RC$v*RC$s+t(f)%*%RC$P%*%f)+
-    sig_b2-exp(sig_b2)/RC$mu_sb+zeta-exp(zeta)/RC$mu_c-0.5/RC$tau_pb2*(phi_b-RC$mu_pb)^2
+    sig_b2-exp(sig_b2)/RC$mu_sb+zeta-exp(zeta)/RC$mu_c-0.5/RC$tau_pb2*(phi_b-RC$mu_pb)^2)
   
   W=solve(L,X%*%Sig_x)
   x_u=RC$mu_x+t(chol(Sig_x))%*%as.matrix(rnorm(RC$n+2))
   sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*as.matrix(rnorm(RC$N)),0)
-  x=x_u-t(W)%*%solve(L,sss)
+  x=as.matrix(x_u-t(W)%*%solve(L,sss))
   yp=X %*% x
   yp=yp[1:RC$N,]
   ypo=yp+as.matrix(rnorm(RC$n))*sqrt(varr)

@@ -65,11 +65,12 @@ RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #%Setja Ã? RC
 RC$B=B_splines(t(RC$w_tild)/RC$w_tild[length(RC$w_tild)])
 RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
 
-#Dens = function(th) {-Densevalm22(th,RC)$p}
+Dens = function(th) {-Densevalm22(th,RC)$p}
 
-#Densmin=optim(par=as.matrix(rep(0,9)),Dens,hessian=TRUE)
+Densmin=optim(par=as.matrix(rep(0,9)),Dens,method="BFGS",hessian=TRUE)
 
-t_m =c(-1.6250,-2.1239,0.5306,-4.6105,-4.2889,-4.7709,-5.2530,-4.9505,-4.8897)
+t_m =Densmin$par
+H=Densmin$hessian
 
 
 
