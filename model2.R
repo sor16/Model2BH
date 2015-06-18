@@ -65,143 +65,174 @@ RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #%Setja Ã? RC
 RC$B=B_splines(t(RC$w_tild)/RC$w_tild[length(RC$w_tild)])
 RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
 
-Dens = function(th) Densevalm22(th,RC)$pmin;
+#Dens = function(th) {-Densevalm22(th,RC)$p}
 
-Densmin=optim(par=as.matrix(rep(0,9)),Dens,hessian=TRUE)
-# 
-# phi_b=t_m(3);
-# sig_b2=t_m(2);
-# zeta=t_m(1);
-# lambda=t_m(4:9);
-# 
-# l=log(RC.w_tild+exp(t_m(1)));
-# 
-# varr_m=exp(RC.B*lambda);
-# Sig_eps=diag([varr_m;0]);
-# R_Beta=(1+sqrt(5)*RC.dist/exp(phi_b)+5*RC.dist.^2/(3*exp(phi_b)^2)).*exp(-sqrt(5)*RC.dist/exp(phi_b))+eye(RC.n)*RC.nugget;
-# Sig_x=[RC.Sig_ab,zeros(2,RC.n);zeros(RC.n,2),exp(sig_b2)*R_Beta];
-# 
-# X=sparse([ones(size(l)),l,sparse(diag(l))*RC.A;RC.Z]);
-# L=chol(full(X*Sig_x*X'+Sig_eps))';
-# 
-# w=L\(-RC.y+X*RC.mu_x);
-# mu=RC.mu_x-Sig_x*(X'*(L'\w));
-#                       
-#                       ymu=X*mu;
-#                       ymu=ymu(1:RC.N);
-#                       hold on;plot(RC.w,exp(ymu))
-#                       
-#                       W=L\(X*Sig_x);
-#                       vartem=diag(X*(Sig_x-W'*W)*X');
-# vartem=vartem(1:RC.N)
-# varaprr=+vartem+varr_m;
-# 
-# 
-# %emp bayes
-# ymu %mat
-# [ymu+norminv(0.025,0,sqrt(varaprr)) ymu+norminv(0.975,0,sqrt(varaprr))] %Ã¶ryggisbil Ã¡ log
-# 
-# %[norminv(0.025,0,sqrt(varaprr)) norminv(0.975,0,sqrt(varaprr))]
-# 
-# 
-# 
-# 
-# 
-# %LH=chol(H)'/0.42;
-# LH=chol(H)'/0.8;
-# %LH=chol(H)';
-# 
-# 
-# accept=0;
-# 
-# 
-# 
-# t1=zeros(9,Nit);
-# t2=zeros(9,Nit);
-# t3=zeros(9,Nit);
-# t4=zeros(9,Nit);
-# 
-# 
-# xsiz=max(size(mu));
-# x1=zeros(xsiz,Nit);
-# x2=zeros(xsiz,Nit);
-# x3=zeros(xsiz,Nit);
-# x4=zeros(xsiz,Nit);
-# 
-# tic
-# for j=1:4
-# t_old=t_m;
-# t=zeros(9,Nit);
-# x=zeros(xsiz,Nit);
-# yp=zeros(RC.N,Nit);
-# ypo=zeros(RC.N,Nit);
-# varr=zeros(RC.N,Nit);
-# D=zeros(1,Nit);
-# [p_old,x_old,yp_old,ypo_old,D_old,varr_old]=DensEvalm22(t_old,RC);
-# for i=1:Nit
-# t_new=t_old+(LH'\normrnd(0,1,[9,1]));
-#              [p_new,x_new,yp_new,ypo_new,D_new,varr_new]=DensEvalm22(t_new,RC);
-#              logR=p_new-p_old;
-#              if logR>log(rand(1))
-#              t_old=t_new;
-#              x_old=x_new;
-#              p_old=p_new;
-#              yp_old=yp_new;
-#              ypo_old=ypo_new;
-#              D_old=D_new;
-#              varr_old=varr_new;
-#              end
-#              t(:,i)=t_old;
-#              yp(:,i)=yp_old;
-#              ypo(:,i)=ypo_old;
-#              D(1,i)=D_old;
-#              x(:,i)=x_old;
-#              varr(:,i)=varr_old;
-#              end
-#              
-#              
-#              switch j
-#              case 1
-#              t1=t;
-#              yp1=yp;
-#              ypo1=ypo;
-#              D1=D;
-#              x1=x;
-#              varr1=varr;
-#              case 2
-#              t2=t;
-#              yp2=yp;
-#              ypo2=ypo;
-#              D2=D;
-#              x2=x;
-#              varr2=varr;
-#              case 3
-#              t3=t;
-#              yp3=yp;
-#              ypo3=ypo;
-#              D3=D;
-#              x3=x;
-#              varr3=varr;
-#              case 4
-#              t4=t;
-#              ypo4=ypo;
-#              yp4=yp;
-#              D4=D;
-#              x4=x;
-#              varr4=varr;
-#              end
-#              end
-#              toc
-#              
-#              Dhat=-2*sum(log(lognpdf(exp(RC.y(1:RC.N)),ymu,sqrt(varr_m))));
-#              Davg=mean([D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]);
-#              pd=Davg-Dhat;
-#              DIC=Dhat+2*pd;
-#              B=1/mean(exp(0.5*[D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]));
-#              [Dhat Davg DIC pd B]
-#              
-#              
-#              
+#Densmin=optim(par=as.matrix(rep(0,9)),Dens,hessian=TRUE)
+
+t_m =c(-1.6250,-2.1239,0.5306,-4.6105,-4.2889,-4.7709,-5.2530,-4.9505,-4.8897)
+
+
+
+phi_b=t_m[3]
+sig_b2=t_m[2]
+zeta=t_m[1]
+lambda=t_m[4:9]
+
+l=log(RC$w_tild+exp(t_m[1])) #as.matrix
+
+varr_m=exp(RC$B%*%lambda)
+Sig_eps=diag(as.numeric(rbind(varr_m,0)))
+R_Beta=(1+sqrt(5)*RC$dist/exp(phi_b)+5*RC$dist^2/(3*exp(phi_b)^2))*exp(-sqrt(5)*RC$dist/exp(phi_b))+diag(1,RC$n,RC$n)*RC$nugget
+Sig_x=rbind(cbind(RC$Sig_ab,matrix(0,nrow=2,ncol=RC$n)),cbind(matrix(0,nrow=RC$n,ncol=2),exp(sig_b2)*R_Beta))
+
+X=Matrix(rbind(cbind(matrix(1,dim(l)),l,Matrix(diag(as.numeric(l)),sparse=TRUE)%*%RC$A),RC$Z),sparse=TRUE)
+
+#check
+
+L=t(chol(as.matrix(X%*%Sig_x%*%t(X)+Sig_eps)))
+
+w=solve(L,(-RC$y+X%*%RC$mu_x))
+mu=RC$mu_x-Sig_x%*%(t(X)%*%(solve(t(L),w)))
+
+#
+                      
+ymu=X%*%mu
+ymu=ymu[1:RC$N]
+plot(RC$w,exp(ymu))
+
+W=solve(L,(X%*%Sig_x))
+vartem=diag(X*(Sig_x-t(W)%*%W)%*%t(X))
+
+vartem=vartem[1:RC$N]
+varaprr=+vartem+varr_m
+
+
+#%emp bayes
+ymu #%mat
+oryggisbil=cbind(ymu+qnorm(0.025,0,sqrt(varaprr)), ymu+qnorm(0.975,0,sqrt(varaprr))) #oryggisbil a log
+
+#[norminv(0.025,0,sqrt(varaprr)) norminv(0.975,0,sqrt(varaprr))]
+
+
+
+
+
+#LH=chol(H)'/0.42
+LH=t(chol(H))/0.8
+#LH=chol(H)';
+
+
+#accept=0;
+
+
+
+t1=matrix(0,9,Nit)
+t2=matrix(0,9,Nit)
+t3=matrix(0,9,Nit)
+t4=matrix(0,9,Nit)
+
+
+xsiz=max(dim(mu));
+x1=matrix(0,xsiz,Nit)
+x2=matrix(0,xsiz,Nit)
+x3=matrix(0,xsiz,Nit)
+x4=matrix(0,xsiz,Nit)
+
+
+for(j in 1:4){
+  t_old=t_m
+  t=matrix(0,nrow=9,ncol=Nit)
+  x=matrix(0,nrow=xsiz,ncol=Nit)
+  yp=matrix(0,nrow=RC$N,ncol=Nit)
+  ypo=matrix(0,nrow=RC$N,ncol=Nit)
+  varr=matrix(0,nrow=RC$N,ncol=Nit)
+  D=matrix(0,nrow=1,ncol=Nit)
+  
+  
+  
+  Dens<-Denseval11(t_old,RC)
+  p_old=Dens$p
+  x_old=Dens$x
+  yp_old=Dens$yp
+  ypo_old=Dens$ypo
+  D_old=Dens$D
+  varr_old=Dens$varr
+  
+  for(i in 1:Nit){
+    t_new=t_old+solve(t(LH),as.matrix(rnorm(9,0,1)))
+    
+    Densnew<-Denseval11(t_new,RC)
+    p_new=Densnew$p
+    x_new=Densnew$x
+    yp_new=Densnew$yp
+    ypo_new=Densnew$ypo
+    D_new=Densnew$D
+    varr_new=Densnew$varr
+    
+    logR=p_new-p_old
+    
+    if (logR>log(runif(1))){
+      t_old=t_new
+      x_old=x_new
+      p_old=p_new
+      yp_old=yp_new
+      ypo_old=ypo_new
+      D_old=D_new
+      varr_old=varr_new
+    }
+    
+    t[,i]=rbind(t_m,x_old)
+    yp[,i]=yp_old
+    ypo[,i]=ypo_old
+    #     t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
+    #     t_temp=t
+    #     yp=cbind(yp_temp,yp_old)
+    #     yp_temp=yp
+    #     ypo=cbind(ypo_temp,ypo_old)
+    #     ypo_temp=ypo
+    
+    D[1,i]=D_old
+    varr[,i]=varr_old
+  }
+  
+  if(j==1){
+    t1=t
+    yp1=yp
+    ypo1=ypo
+    D1=D
+    varr1=varr
+  } else if(j==2){
+    t2=t
+    yp2=yp
+    ypo2=ypo
+    D2=D
+    varr2=varr
+  } else if(j==3){
+    t3=t
+    yp3=yp
+    ypo3=ypo
+    D3=D
+    varr3=varr
+  } else if(j==4){
+    t4=t
+    yp4=yp
+    ypo4=ypo
+    D4=D
+    varr4=varr
+  }
+}
+
+
+Dhat=-2*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m)))
+Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
+pd=Davg-Dhat
+DIC=Dhat+2*pd
+B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
+
+c(Dhat, Davg, DIC, pd, B) #afhverju thessi vigur?
+
+
+
 #              % 
 #              % parfor j=1:4
 #              %     t_old=t_m;
