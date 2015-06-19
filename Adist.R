@@ -18,7 +18,7 @@ library(Matrix)
   # %N:     Number of measurements
 
 
-  
+w=as.matrix(w)  
 N=length(w[,1])
 O=unique(w[,1])
 

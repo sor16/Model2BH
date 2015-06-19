@@ -1,4 +1,3 @@
-library(Matrix)
 Densevalm22 <- function(th,RC){
   th=as.matrix(th)
   phi_b=th[3,]
