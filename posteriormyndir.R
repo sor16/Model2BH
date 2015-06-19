@@ -3,7 +3,6 @@
 data=data.frame(W=RC$w, Q=RC$y)
 data$l_m=l_m
 seq=seq(2000,20000,5)
-#data$fit=X_m%*%muquantypo1=ypo1[,seq]
 quantypo2=ypo2[,seq]
 quantypo3=ypo3[,seq]
 quantypo4=ypo4[,seq]
