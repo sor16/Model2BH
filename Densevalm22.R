@@ -3,10 +3,10 @@ Densevalm22 <- function(th,RC){
   phi_b=th[3,]
   sig_b2=th[2,]
   zeta=th[1,]
-  lambda=as.matrix(th[4:9,])
+  lambda=th[4:9, ,drop=FALSE]
   
   
-  f=as.matrix(lambda[1:5]-lambda[6])
+  f=lambda[1:5,,drop=FALSE]-lambda[6,]
   l=as.vector(log(RC$w_tild+exp(th[1,])))
   
   varr=as.vector(exp(RC$B%*%lambda))
@@ -22,8 +22,8 @@ Densevalm22 <- function(th,RC){
     sig_b2-exp(sig_b2)/RC$mu_sb+zeta-exp(zeta)/RC$mu_c-0.5/RC$tau_pb2*(phi_b-RC$mu_pb)^2)
   
   W=solve(L,X%*%Sig_x)
-  x_u=RC$mu_x+t(chol(Sig_x))%*%as.matrix(rnorm(RC$n+2))
-  sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*as.matrix(rnorm(RC$N)),0)
+  x_u=RC$mu_x+t(chol(Sig_x))%*%rnorm(RC$n+2)
+  sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*rnorm(RC$N),0)
   x=as.matrix(x_u-t(W)%*%solve(L,sss))
   yp=X %*% x
   yp=yp[1:RC$N,]
@@ -31,7 +31,7 @@ Densevalm22 <- function(th,RC){
   
   D=-2*sum(log(dlnorm(exp(RC$y[1:RC$N,]),yp,sqrt(varr))))
   
-  return(list("p"=p,"x"=x,"yp"=yp,"ypo"=ypo,"D"=D,"varr"=varr))
-  
+  #return(list("p"=p,"x"=x,"yp"=yp,"ypo"=ypo,"D"=D,"varr"=varr))
+  return(p)
   
 }

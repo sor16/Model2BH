@@ -36,7 +36,7 @@ RC$v=5
  wq = as.matrix(read.table('15.txt'))
 
 RC$y=rbind(as.matrix(log(wq[,2])),0)
-RC$w=as.matrix(0.01*wq[,1])
+RC$w=0.01*wq[,1]
 RC$w_tild=RC$w-min(RC$w)
 # 
  H=RC$w
@@ -60,7 +60,7 @@ RC$P=diag(nrow=5,ncol=5,6)-matrix(nrow=5,ncol=5,1)
  
 RC$Sig_ab= rbind(c(RC$sig_a^2, RC$p_ab*RC$sig_a*RC$sig_b), c(RC$p_ab*RC$sig_a*RC$sig_b, RC$sig_b^2))
 
-RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #%Setja Ã? RC
+RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #Setja i RC
  
 RC$B=B_splines(t(RC$w_tild)/RC$w_tild[length(RC$w_tild)])
 RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
