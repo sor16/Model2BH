@@ -23,7 +23,7 @@ Densevalm22 <- function(th,RC){
   
   W=solve(L,X%*%Sig_x)
   x_u=RC$mu_x+t(chol(Sig_x))%*%rnorm(RC$n+2)
-  sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*rnorm(RC$N),0)
+  sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*as.matrix(rnorm(RC$N)),0)
   x=as.matrix(x_u-t(W)%*%solve(L,sss))
   yp=X %*% x
   yp=yp[1:RC$N,]
