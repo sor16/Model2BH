@@ -1,4 +1,4 @@
-Densevalm22fast <- function(th,RC){
+Densevalm22 <- function(th,RC){
   phi_b=th[3]
   sig_b2=th[2]
   zeta=th[1]

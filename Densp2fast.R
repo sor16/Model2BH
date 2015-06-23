@@ -1,4 +1,4 @@
-Densp2fast <- function(th,RC){
+Densp2 <- function(th,RC){
   phi_b=th[3]
   sig_b2=th[2]
   zeta=th[1]
