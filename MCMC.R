@@ -22,6 +22,7 @@ for(i in 1:4){
     ypo4=ypo
   }
 }
+
 proc.time() - ptm
 #post.samp <- MCMCmetrop1R(Densp,theta.init=t_m,RC=RC,mcmc=20000)
 
@@ -29,6 +30,6 @@ ptm <- proc.time()
 ypo=list()
 for(i in 1:4){
 post.samp <- MCMCmetrop1R(Densp2fast,theta.init=t_m,RC=RC,mcmc=20000)
-ypo=apply(post.samp,1,function(x) Densevalm22(x,RC)$ypo) 
+ypo=apply(post.samp,1,function(x) Densevalm22fast(x,RC)$ypo) 
 }
 proc.time() - ptm

@@ -1,14 +1,9 @@
-
 #Model2BH
 library(stats)
-library(Matrix)
 library(ggplot2)
-ptm <- proc.time()
-#axel/begin/08.06.15
 
 
- Nit=50000;
- dataset=15;
+Nit=20000;
 
 RC=list()
 
@@ -27,27 +22,11 @@ RC$tau_pb2=0.25^2
 RC$s=3
 RC$v=5
 
-
-
-# %import data from text file that has water level measurements in cm in left
-# %column and corresponding discharge measurements in m^3/s in right column
-# wq=importdata([num2str(dataset) '.txt']);
-# %wq=importdata(['Jokdal.txt']);
-
- wq = as.matrix(read.table('15.txt'))
+wq = as.matrix(read.table('15.txt'))
 
 RC$y=rbind(as.matrix(log(wq[,2])),0)
 RC$w=as.matrix(0.01*wq[,1])
 RC$w_tild=RC$w-min(RC$w)
-# 
- H=RC$w
- Q=wq[,2]
- dat=data.frame(H,Q)
- 
- 
- ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
-
-#axel/end/08.06.15
 
 Adist1 <- Adist(RC$w)
 RC$A=Adist1$A
@@ -66,70 +45,13 @@ RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
 RC$m1=matrix(0,nrow=2,ncol=RC$n)
 RC$m2=matrix(0,nrow=RC$n,ncol=2)
 theta.init=as.matrix(rep(0,9))
-# ypo=list()
-# for(i in 1:4){
-#   post.samp <- MCMCmetrop1R(Densp2fast,theta.init=t_m,RC=RC,mcmc=20000)
-#   ypo[[i]]=apply(post.samp,1,function(x) Densevalm22(x,RC)$ypo) 
-# }
-# 
+
 Dens = function(th) {-Densevalm22fast(th,RC)$p}
 
 Densmin=optim(par=theta.init,Dens,method="BFGS",hessian=TRUE)
 
 t_m =Densmin$par
 H=Densmin$hessian
-
-
-
-phi_b=t_m[3]
-sig_b2=t_m[2]
-zeta=t_m[1]
-lambda=t_m[4:9]
-
-l=log(RC$w_tild+exp(t_m[1])) #as.matrix
-
-varr_m=exp(RC$B%*%lambda)
-Sig_eps=diag(as.numeric(rbind(varr_m,0)))
-R_Beta=(1+sqrt(5)*RC$dist/exp(phi_b)+5*RC$dist^2/(3*exp(phi_b)^2))*exp(-sqrt(5)*RC$dist/exp(phi_b))+diag(1,RC$n,RC$n)*RC$nugget
-Sig_x=rbind(cbind(RC$Sig_ab,matrix(0,nrow=2,ncol=RC$n)),cbind(matrix(0,nrow=RC$n,ncol=2),exp(sig_b2)*R_Beta))
-
-X=Matrix(rbind(cbind(matrix(1,dim(l)),l,Matrix(diag(as.numeric(l)),sparse=TRUE)%*%RC$A),RC$Z),sparse=TRUE)
-
-
-L=t(chol(as.matrix(X%*%Sig_x%*%t(X)+Sig_eps)))
-
-w=solve(L,(-RC$y+X%*%RC$mu_x))
-mu=RC$mu_x-Sig_x%*%(t(X)%*%(solve(t(L),w)))
-                      
-ymu=X%*%mu
-ymu=ymu[1:RC$N]
-plot(RC$w,exp(ymu))
-
-W=solve(L,(X%*%Sig_x))
-vartem=diag(X%*%(Sig_x-t(W)%*%W)%*%t(X))
-
-vartem=vartem[1:RC$N]
-#varaprr=+vartem+varr_m
-
-
-#%emp bayes
-#ymu #%mat
-oryggisbil=cbind(ymu+qnorm(0.025,0,sqrt(varaprr)), ymu+qnorm(0.975,0,sqrt(varaprr))) #oryggisbil a log
-
-#[norminv(0.025,0,sqrt(varaprr)) norminv(0.975,0,sqrt(varaprr))]
-
-
-
-
-
-#LH=chol(H)'/0.42
-LH=t(chol(H))/0.8
-#LH=chol(H)';
-
-
-#accept=0;
-
-
 
 t1=matrix(0,9,Nit)
 t2=matrix(0,9,Nit)
@@ -220,11 +142,3 @@ for(j in 1:4){
     varr4=varr
   }
 }
-
-
-# Dhat=(-2)*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m))))
-# Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
-# pd=Davg-Dhat
-# DIC=Dhat+2*pd
-# B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
-proc.time()-ptm
