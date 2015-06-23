@@ -36,7 +36,7 @@ RC$v=5
  wq = as.matrix(read.table('15.txt'))
 
 RC$y=rbind(as.matrix(log(wq[,2])),0)
-RC$w=0.01*wq[,1]
+RC$w=as.matrix(0.01*wq[,1])
 RC$w_tild=RC$w-min(RC$w)
 # 
  H=RC$w
@@ -53,8 +53,7 @@ RC$A=Adist1$A
 RC$dist=Adist1$dist
 RC$n=Adist1$n
 RC$N=Adist1$N
- 
- 
+
 RC$A=Matrix(RC$A,sparse=TRUE)
 RC$P=diag(nrow=5,ncol=5,6)-matrix(nrow=5,ncol=5,1)
  
@@ -64,10 +63,12 @@ RC$mu_x=as.matrix(c(RC$mu_a,RC$mu_b, rep(0,RC$n))) #Setja i RC
  
 RC$B=B_splines(t(RC$w_tild)/RC$w_tild[length(RC$w_tild)])
 RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
-
+RC$m1=matrix(0,nrow=2,ncol=RC$n)
+RC$m2=matrix(0,nrow=RC$n,ncol=2)
+theta.init=as.matrix(rep(0,9))
 Dens = function(th) {-Densevalm22(th,RC)$p}
 
-Densmin=optim(par=as.matrix(rep(0,9)),Dens,method="BFGS",hessian=TRUE)
+Densmin=optim(par=theta.init,Dens,method="BFGS",hessian=TRUE)
 
 t_m =Densmin$par
 H=Densmin$hessian
