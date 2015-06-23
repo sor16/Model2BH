@@ -1,8 +1,9 @@
+
 #Model2BH
 library(stats)
 library(Matrix)
 library(ggplot2)
-
+ptm <- proc.time()
 #axel/begin/08.06.15
 
 
@@ -54,7 +55,6 @@ RC$dist=Adist1$dist
 RC$n=Adist1$n
 RC$N=Adist1$N
 
-RC$A=Matrix(RC$A,sparse=TRUE)
 RC$P=diag(nrow=5,ncol=5,6)-matrix(nrow=5,ncol=5,1)
  
 RC$Sig_ab= rbind(c(RC$sig_a^2, RC$p_ab*RC$sig_a*RC$sig_b), c(RC$p_ab*RC$sig_a*RC$sig_b, RC$sig_b^2))
@@ -66,7 +66,13 @@ RC$Z=cbind(t(rep(0,2)),t(rep(1,RC$n)))
 RC$m1=matrix(0,nrow=2,ncol=RC$n)
 RC$m2=matrix(0,nrow=RC$n,ncol=2)
 theta.init=as.matrix(rep(0,9))
-Dens = function(th) {-Densevalm22(th,RC)$p}
+# ypo=list()
+# for(i in 1:4){
+#   post.samp <- MCMCmetrop1R(Densp2fast,theta.init=t_m,RC=RC,mcmc=20000)
+#   ypo[[i]]=apply(post.samp,1,function(x) Densevalm22(x,RC)$ypo) 
+# }
+# 
+Dens = function(th) {-Densevalm22fast(th,RC)$p}
 
 Densmin=optim(par=theta.init,Dens,method="BFGS",hessian=TRUE)
 
@@ -89,14 +95,11 @@ Sig_x=rbind(cbind(RC$Sig_ab,matrix(0,nrow=2,ncol=RC$n)),cbind(matrix(0,nrow=RC$n
 
 X=Matrix(rbind(cbind(matrix(1,dim(l)),l,Matrix(diag(as.numeric(l)),sparse=TRUE)%*%RC$A),RC$Z),sparse=TRUE)
 
-#check
 
 L=t(chol(as.matrix(X%*%Sig_x%*%t(X)+Sig_eps)))
 
 w=solve(L,(-RC$y+X%*%RC$mu_x))
 mu=RC$mu_x-Sig_x%*%(t(X)%*%(solve(t(L),w)))
-
-#
                       
 ymu=X%*%mu
 ymu=ymu[1:RC$N]
@@ -106,11 +109,11 @@ W=solve(L,(X%*%Sig_x))
 vartem=diag(X%*%(Sig_x-t(W)%*%W)%*%t(X))
 
 vartem=vartem[1:RC$N]
-varaprr=+vartem+varr_m
+#varaprr=+vartem+varr_m
 
 
 #%emp bayes
-ymu #%mat
+#ymu #%mat
 oryggisbil=cbind(ymu+qnorm(0.025,0,sqrt(varaprr)), ymu+qnorm(0.975,0,sqrt(varaprr))) #oryggisbil a log
 
 #[norminv(0.025,0,sqrt(varaprr)) norminv(0.975,0,sqrt(varaprr))]
@@ -152,7 +155,7 @@ for(j in 1:4){
   
   
   
-  Dens<-Densevalm22(t_old,RC)
+  Dens<-Densevalm22fast(t_old,RC)
   p_old=Dens$p
   x_old=Dens$x
   yp_old=Dens$yp
@@ -163,7 +166,7 @@ for(j in 1:4){
   for(i in 1:Nit){
     t_new=t_old+solve(t(LH),as.matrix(rnorm(9,0,1)))
     
-    Densnew<-Densevalm22(t_new,RC)
+    Densnew<-Densevalm22fast(t_new,RC)
     p_new=Densnew$p
     x_new=Densnew$x
     yp_new=Densnew$yp
@@ -219,37 +222,9 @@ for(j in 1:4){
 }
 
 
-Dhat=(-2)*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m))))
-Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
-pd=Davg-Dhat
-DIC=Dhat+2*pd
-B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
-
-c(Dhat, Davg, DIC, pd, B) #afhverju thessi vigur?
-
-
-
-#              % 
-#              % parfor j=1:4
-#              %     t_old=t_m;
-#              %     t=zeros(9,20000);
-#              %     for i=1:5000
-#              %     t_new=t_old+(LH'\normrnd(0,1,[9,1]));
-# %     logR=Dens(t_old)-Dens(t_new);
-# %         if logR>log(rand(1))
-# %         t_old=t_new;        
-# %         end
-# %     t(:,i)=t_old;
-# %     end
-# % end
-# % toc
-# % 
-# % for i=1:5000
-# % d(i)=(10^-3+(x(4:8,i)-x(9,i))'*P*(x(4:8,i)-x(9,i)))/chi2rnd(10^-3+5);
-#         % end
-#         % 
-#         % v=10^-3+5;
-#         % s2=(10^-3+(t_m(4:8)-t_m(9))'*P*(t_m(4:8)-t_m(9)))/v;
-# % 
-# % v*s2/(v+2);
-# % 
+# Dhat=(-2)*sum(log(dlnorm(exp(RC$y[1:RC$N]),ymu,sqrt(varr_m))))
+# Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
+# pd=Davg-Dhat
+# DIC=Dhat+2*pd
+# B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
+proc.time()-ptm

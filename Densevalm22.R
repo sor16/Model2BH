@@ -23,7 +23,7 @@ Densevalm22 <- function(th,RC){
   x_u=RC$mu_x+t(chol(Sig_x))%*%rnorm(RC$n+2)
   sss=(X%*%x_u)-RC$y+rbind(sqrt(varr)*as.matrix(rnorm(RC$N)),0)#Matrix 3.48 milli/matrix 23.6085 micro
   x=as.matrix(x_u-t(W)%*%solve(L,sss))
-  yp=X %*% x #M 17.46 micro/m 
+  yp=X %*% x #M 17.46 micro/m 1.5 
   yp=yp[1:RC$N,]
   ypo=yp+as.matrix(rnorm(RC$n))*sqrt(varr)
   

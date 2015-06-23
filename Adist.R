@@ -46,7 +46,6 @@ A[ee,e]=1
 
 O=t(O)
 #A=diag(1,nrow=N,ncol=N)
-A=Matrix(A,sparse=TRUE)
 w2=O
 
 n=length(O)

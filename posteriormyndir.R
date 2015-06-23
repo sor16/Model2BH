@@ -2,12 +2,13 @@
 
 data=data.frame(W=RC$w, Q=head(RC$y,length(RC$w)))
 data$l_m=l
-seq=seq(2000,20000,5)
-quantypo1=ypo[,seq]
+seq=seq(2000,50000,5)
+
+quantypo1=ypo1[,seq]
 quantypo2=ypo2[,seq]
 quantypo3=ypo3[,seq]
 quantypo4=ypo4[,seq]
-quantmatrix=t(cbind(quantypo1,quantypo2,quantypo3,quantypo4))
+ quantmatrix=t(cbind(quantypo1,quantypo2,quantypo3,quantypo4))
 prctile=t(apply(quantmatrix, 2, quantile, probs = c(0.025,0.5, 0.975),  na.rm = TRUE))
 data$fit=prctile[,2]
 data$lower=prctile[,1]

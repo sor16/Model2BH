@@ -27,8 +27,8 @@ proc.time() - ptm
 
 ptm <- proc.time()
 ypo=list()
-#for(i in 1:4){
-post.samp <- MCMCmetrop1R(Densp2,theta.init=t_m,RC=RC,mcmc=20000)
+for(i in 1:4){
+post.samp <- MCMCmetrop1R(Densp2fast,theta.init=t_m,RC=RC,mcmc=20000)
 ypo=apply(post.samp,1,function(x) Densevalm22(x,RC)$ypo) 
-#}
+}
 proc.time() - ptm
